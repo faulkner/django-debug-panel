@@ -48,7 +48,6 @@ class DebugPanelMiddleware(debug_toolbar.middleware.DebugToolbarMiddleware):
 
         return res.func(request, *res.args, **res.kwargs)
 
-
     def process_response(self, request, response):
         """
         Store the DebugToolbarMiddleware rendered toolbar into a cache store.
@@ -63,7 +62,7 @@ class DebugPanelMiddleware(debug_toolbar.middleware.DebugToolbarMiddleware):
         if toolbar:
             # for django-debug-toolbar >= 1.4
             for panel in reversed(toolbar.enabled_panels):
-                if hasattr(panel, 'generate_stats'):
+                if hasattr(panel, 'generate_stats') and panel.panel_id != 'SQLPanel':
                     panel.generate_stats(request, response)
 
             cache_key = "%f" % time.time()
